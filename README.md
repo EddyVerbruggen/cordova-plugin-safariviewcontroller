@@ -10,6 +10,7 @@ by Eddy Verbruggen - [@eddyverbruggen](https://twitter.com/eddyverbruggen)
 4. [Usage](#4-usage)
 
 ## 1. Description
+* Use in cases where you'd otherwise use InAppBrowser (which uses the slower UIWebView)
 * Use the new and powerful iOS9 viewcontroller to show webcontent in your PhoneGap app
 * Requires XCode 7 / iOS9 SDK to build
 * Requires iOS9 to use, lower versions need to fall back to InAppBrowser (example below!)
