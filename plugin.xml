@@ -34,7 +34,7 @@
     <header-file src="src/ios/SafariViewController.h"/>
     <source-file src="src/ios/SafariViewController.m"/>
 
-    <framework src="SafariServices.framework"/>
+    <framework src="SafariServices.framework" weak="true"/>
   </platform>
 
 </plugin>
