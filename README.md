@@ -8,9 +8,10 @@ by Eddy Verbruggen - [@eddyverbruggen](https://twitter.com/eddyverbruggen)
 2. [Screenshots](#2-screenshots)
 3. [Installation](#3-installation)
 4. [Usage](#4-usage)
+5. [Advantages over InAppBrowser](#5-Advantages-over-inappbrowser)
 
 ## 1. Description
-* Use in cases where you'd otherwise use InAppBrowser (which uses the slower UIWebView)
+* Use in cases where you'd otherwise use InAppBrowser
 * Use the new and powerful iOS9 viewcontroller to show webcontent in your PhoneGap app
 * Requires XCode 7 / iOS9 SDK to build
 * Requires iOS9 to use, lower versions need to fall back to InAppBrowser (example below!)
@@ -73,5 +74,9 @@ function openUrl(url, readerMode) {
 }
 ```
 
-## 5. Fun facts
+## 5. Advantages over InAppBrowser
+* InAppBrowser uses the slow UIWebView (even when you're using a WKWebView plugin!), this plugin uses the ultra fast Safari Webview.
+* This is now Apple's recommended way to use a browser in your app.
+* A nicer / cleaner UI which is consistent with Safari and all other apps using a `SFSafariViewController`.
+* Since this is the system's main browser, assets like cookies are shared with your app, so the user is still logged on in his favorite websites.
 * Whereas `cordova-plugin-inappbrowser` is affected by [ATS](https://developer.apple.com/library/prerelease/ios/technotes/App-Transport-Security-Technote/), this plugin is not. This means you can even load `http` URL's without whitelisting them.
