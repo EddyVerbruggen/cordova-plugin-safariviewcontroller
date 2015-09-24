@@ -66,9 +66,12 @@ function openUrl(url, readerMode) {
             alert("KO: " + msg);
           })
     } else {
-      // potentially powered by InAppBrowser because that clobbers window.open
+      // potentially powered by InAppBrowser because that (currently) clobbers window.open
       window.open(url, '_blank', 'location=yes');
     }
   })
 }
 ```
+
+## 5. Fun facts
+* Whereas `cordova-plugin-inappbrowser` is affected by [ATS](https://developer.apple.com/library/prerelease/ios/technotes/App-Transport-Security-Technote/), this plugin is not. This means you can even load `http` URL's without whitelisting them.

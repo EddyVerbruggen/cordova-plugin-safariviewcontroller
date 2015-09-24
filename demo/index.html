@@ -42,7 +42,7 @@
               alert("KO: " + msg);
             })
       } else {
-        // potentially powered by InAppBrowser because that clobbers window.open
+        // potentially powered by InAppBrowser because that (currently) clobbers window.open
         window.open(url /*, '_blank', 'location=yes'*/);
       }
     })
