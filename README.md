@@ -8,7 +8,7 @@ by Eddy Verbruggen - [@eddyverbruggen](https://twitter.com/eddyverbruggen)
 2. [Screenshots](#2-screenshots)
 3. [Installation](#3-installation)
 4. [Usage](#4-usage)
-5. [Advantages over InAppBrowser](#5-Advantages-over-inappbrowser)
+5. [Advantages over InAppBrowser](#5-advantages-over-inappbrowser)
 
 ## 1. Description
 * Use in cases where you'd otherwise use InAppBrowser
