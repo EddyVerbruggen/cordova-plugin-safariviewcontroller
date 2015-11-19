@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-safariviewcontroller",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Forget InAppBrowser for iOS - this is way better for displaying read-only web content in your PhoneGap app.",
   "cordova": {
     "id": "cordova-plugin-safariviewcontroller",
