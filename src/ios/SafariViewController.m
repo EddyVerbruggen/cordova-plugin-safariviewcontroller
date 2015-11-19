@@ -1,6 +1,9 @@
 #import "SafariViewController.h"
 
 @implementation SafariViewController
+{
+  SFSafariViewController *vc;
+}
 
 - (void) isAvailable:(CDVInvokedUrlCommand*)command {
   bool avail = NSClassFromString(@"SFSafariViewController") != nil;
@@ -19,9 +22,17 @@
   NSURL *url = [NSURL URLWithString:urlString];
   bool readerMode = [[options objectForKey:@"enterReaderModeIfAvailable"] isEqualToNumber:[NSNumber numberWithBool:YES]];
 
-  SFSafariViewController *vc = [[SFSafariViewController alloc] initWithURL:url entersReaderIfAvailable:readerMode];
+  vc = [[SFSafariViewController alloc] initWithURL:url entersReaderIfAvailable:readerMode];
   vc.delegate = self;
   [self.viewController presentViewController:vc animated:YES completion:nil];
+  [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
+}
+
+- (void) hide:(CDVInvokedUrlCommand*)command {
+  if (vc != nil) {
+    [vc dismissViewControllerAnimated:YES completion:nil];
+    vc = nil;
+  }
   [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
 }
 

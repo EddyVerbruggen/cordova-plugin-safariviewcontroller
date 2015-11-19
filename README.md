@@ -72,6 +72,10 @@ function openUrl(url, readerMode) {
     }
   })
 }
+
+function dismissSafari() {
+  SafariViewController.hide()
+}
 ```
 
 ## 5. Advantages over InAppBrowser
