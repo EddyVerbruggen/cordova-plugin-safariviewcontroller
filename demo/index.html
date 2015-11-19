@@ -22,7 +22,8 @@
     <p class="event received">Device is Ready</p>
     <br/>
     <button onclick="openUrl('https://en.m.wikipedia.org/wiki/Safari', false)">Open Wikipedia</button><br/><br/>
-    <button onclick="openUrl('https://en.m.wikipedia.org/wiki/Safari', true)">Open Wikipedia in reader mode</button>
+    <button onclick="openUrl('https://en.m.wikipedia.org/wiki/Safari', true)">Open Wikipedia in reader mode</button><br/><br/>
+    <button onclick="openUrl('https://en.m.wikipedia.org/wiki/Safari', false);setTimeout(dismissSafari, 10000)">Open Wikipedia, automatically dismiss after 10 seconds</button>
   </div>
 </div>
 <script type="text/javascript" src="cordova.js"></script>
@@ -46,6 +47,10 @@
         window.open(url /*, '_blank', 'location=yes'*/);
       }
     })
+  }
+
+  function dismissSafari() {
+    SafariViewController.hide()
   }
 </script>
 </body>
