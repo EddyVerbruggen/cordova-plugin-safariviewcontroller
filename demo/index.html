@@ -24,6 +24,10 @@
     <button onclick="openUrl('https://en.m.wikipedia.org/wiki/Safari', false)">Open Wikipedia</button><br/><br/>
     <button onclick="openUrl('https://en.m.wikipedia.org/wiki/Safari', true)">Open Wikipedia in reader mode</button><br/><br/>
     <button onclick="openUrl('https://en.m.wikipedia.org/wiki/Safari', false);setTimeout(dismissSafari, 10000)">Open Wikipedia, auto-dismiss after 10s</button>
+
+    <p>Events</o>
+    <br/>
+    <input type="checkbox" name="exit" onchange="toggleEventAlert(this.checked, this.name, 'Browser was dismissed')">
   </div>
 </div>
 <script type="text/javascript" src="cordova.js"></script>
@@ -51,6 +55,25 @@
 
   function dismissSafari() {
     SafariViewController.hide()
+  }
+
+  function addEventAlert(eventName, alertMessage) {
+    SafariViewController.addEventListener(eventName, function() {
+      alert(alertMessage);
+    });
+  }
+
+  function removeEvent(eventName) {
+    SafariViewController.removeEventListener(eventName);
+  }
+
+  function toggleEventAlert(on, eventName, alertMessage) {
+    if (on) {
+      addEventAlert(eventname, alertMessage);
+    }
+    else {
+      removeEvent(eventName);
+    }
   }
 </script>
 </body>

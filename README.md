@@ -65,7 +65,13 @@ function openUrl(url, readerMode) {
           },
           function(msg) {
             alert("KO: " + msg);
-          })
+          });
+
+        SafariViewController.addEventListener("exit", function onExit() {
+          console.log("Browser was dismissed");
+
+          SafariViewController.removeEventListener("exit", onExit);
+        });
     } else {
       // potentially powered by InAppBrowser because that (currently) clobbers window.open
       window.open(url, '_blank', 'location=yes');
