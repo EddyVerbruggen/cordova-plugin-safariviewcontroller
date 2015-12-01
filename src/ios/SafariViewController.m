@@ -20,7 +20,7 @@
     return;
   }
   NSURL *url = [NSURL URLWithString:urlString];
-  bool readerMode = [[options objectForKey:@"enterReaderModeIfAvailable"] isEqualToNumber:[NSNumber numberWithBool:YES]];
+  bool readerMode = [[options objectForKey:@"enterReaderModeIfAvailable"] isEqual:[NSNumber numberWithBool:YES]];
 
   vc = [[SFSafariViewController alloc] initWithURL:url entersReaderIfAvailable:readerMode];
   vc.delegate = self;
