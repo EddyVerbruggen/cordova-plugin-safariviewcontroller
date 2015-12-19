@@ -21,16 +21,22 @@
   }
   NSURL *url = [NSURL URLWithString:urlString];
   bool readerMode = [[options objectForKey:@"enterReaderModeIfAvailable"] isEqualToNumber:[NSNumber numberWithBool:YES]];
+  self.animated = [[options objectForKey:@"animated"] isEqualToNumber:[NSNumber numberWithBool:YES]];
+  self.callbackId = command.callbackId;
 
   vc = [[SFSafariViewController alloc] initWithURL:url entersReaderIfAvailable:readerMode];
   vc.delegate = self;
-  [self.viewController presentViewController:vc animated:YES completion:nil];
-  [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
+  // not really necessary to move the callback to the completion handler
+  [self.viewController presentViewController:vc animated:self.animated completion:nil];
+  // .. so doing it here
+  CDVPluginResult * pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"event":@"opened"}];
+  [pluginResult setKeepCallback:[NSNumber numberWithBool:YES]];
+  [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
 }
 
 - (void) hide:(CDVInvokedUrlCommand*)command {
   if (vc != nil) {
-    [vc dismissViewControllerAnimated:YES completion:nil];
+    [vc dismissViewControllerAnimated:self.animated completion:nil];
     vc = nil;
   }
   [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
@@ -42,7 +48,12 @@
     Upon this call, the view controller is dismissed modally.
  */
 - (void)safariViewControllerDidFinish:(SFSafariViewController *)controller {
-  // could emit event to JS, but don't see the usecase yet - perhaps check InAppBrowser impl
+  if (self.callbackId != nil) {
+    NSString * cbid = self.callbackId;
+    self.callbackId = nil;
+    CDVPluginResult * pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"event":@"closed"}];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:cbid];
+  }
 }
 
 /*! @abstract Invoked when the initial URL load is complete.
@@ -51,7 +62,11 @@
     to its initializer. It is not invoked for any subsequent page loads in the same SFSafariViewController instance.
  */
 - (void)safariViewController:(SFSafariViewController *)controller didCompleteInitialLoad:(BOOL)didLoadSuccessfully {
-  // could emit event to JS, but don't see the usecase yet - perhaps check InAppBrowser impl
+  if (self.callbackId != nil) {
+    CDVPluginResult * pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"event":@"loaded"}];
+    [pluginResult setKeepCallback:[NSNumber numberWithBool:YES]];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
+  }
 }
 
 @end

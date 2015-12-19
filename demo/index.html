@@ -33,11 +33,18 @@
     SafariViewController.isAvailable(function (available) {
       if (available) {
         SafariViewController.show({
-              'url': url,
-              'enterReaderModeIfAvailable': readerMode // default false
+              url: url,
+              animated: false, // default true, note that 'hide' will reuse this preference (the 'Done' button will always animate though)
+              enterReaderModeIfAvailable: readerMode // default false
             },
-            function(msg) {
-              console.log("OK: " + msg);
+            function(result) {
+              if (result.event === 'opened') {
+                alert('opened');
+              } else if (result.event === 'loaded') {
+                alert('loaded');
+              } else if (result.event === 'closed') {
+                alert('closed');
+              }
             },
             function(msg) {
               alert("KO: " + msg);

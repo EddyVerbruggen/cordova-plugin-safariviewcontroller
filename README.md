@@ -9,6 +9,7 @@ by Eddy Verbruggen - [@eddyverbruggen](https://twitter.com/eddyverbruggen)
 3. [Installation](#3-installation)
 4. [Usage](#4-usage)
 5. [Advantages over InAppBrowser](#5-advantages-over-inappbrowser)
+6. [Changelog](#6-changelog)
 
 ## 1. Description
 * Use in cases where you'd otherwise use InAppBrowser
@@ -57,11 +58,19 @@ function openUrl(url, readerMode) {
   SafariViewController.isAvailable(function (available) {
     if (available) {
       SafariViewController.show({
-            'url': url,
-            'enterReaderModeIfAvailable': readerMode // default false
+            url: url,
+            animated: false, // default true, note that 'hide' will reuse this preference (the 'Done' button will always animate though)
+            enterReaderModeIfAvailable: readerMode // default false
           },
-          function(msg) {
-            console.log("OK: " + msg);
+          // this success handler will be invoked for the lifecycle events 'opened', 'loaded' and 'closed'
+          function(result) {
+            if (result.event === 'opened') {
+              alert('opened');
+            } else if (result.event === 'loaded') {
+              alert('loaded');
+            } else if (result.event === 'closed') {
+              alert('closed');
+            }
           },
           function(msg) {
             alert("KO: " + msg);
@@ -84,3 +93,6 @@ function dismissSafari() {
 * A nicer / cleaner UI which is consistent with Safari and all other apps using a `SFSafariViewController`.
 * Since this is the system's main browser, assets like cookies are shared with your app, so the user is still logged on in his favorite websites.
 * Whereas `cordova-plugin-inappbrowser` is affected by [ATS](https://developer.apple.com/library/prerelease/ios/technotes/App-Transport-Security-Technote/), this plugin is not. This means you can even load `http` URL's without whitelisting them.
+
+## 6. Changelog
+1.2.0 Added lifecycle events to the success handler of `show`, and added the `animated` property to `show`.
