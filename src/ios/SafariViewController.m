@@ -13,25 +13,34 @@
 
 - (void) show:(CDVInvokedUrlCommand*)command {
   NSDictionary* options = [command.arguments objectAtIndex:0];
-  NSString* transition = options[@"transition"];
   NSString* urlString = options[@"url"];
   if (urlString == nil) {
     [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"url can't be empty"] callbackId:command.callbackId];
     return;
   }
   NSURL *url = [NSURL URLWithString:urlString];
-  bool readerMode = [[options objectForKey:@"enterReaderModeIfAvailable"] isEqualToNumber:[NSNumber numberWithBool:YES]];
-  self.animated = [[options objectForKey:@"animated"] isEqualToNumber:[NSNumber numberWithBool:YES]];
+  bool readerMode = [options[@"enterReaderModeIfAvailable"] isEqualToNumber:[NSNumber numberWithBool:YES]];
+  self.animated = [options[@"animated"] isEqualToNumber:[NSNumber numberWithBool:YES]];
   self.callbackId = command.callbackId;
-
+  
   vc = [[SFSafariViewController alloc] initWithURL:url entersReaderIfAvailable:readerMode];
   vc.delegate = self;
-  
-  if (self.animated) {
-    vc.modalTransitionStyle = [self getTransitionStyle:transition];
-    [self.viewController showViewController:vc sender:self];
+
+  bool hidden = [options[@"hidden"] isEqualToNumber:[NSNumber numberWithBool:YES]];
+  if (hidden) {
+    vc.view.userInteractionEnabled = NO;
+    vc.view.alpha = 0.0;
+    [self.viewController addChildViewController:vc];
+    [self.viewController.view addSubview:vc.view];
+    [vc didMoveToParentViewController:self.viewController];
+    vc.view.frame = CGRectZero;
   } else {
-    [self.viewController presentViewController:vc animated:NO completion:nil];
+    if (self.animated) {
+      vc.modalTransitionStyle = [self getTransitionStyle:options[@"transition"]];
+      [self.viewController showViewController:vc sender:self];
+    } else {
+      [self.viewController presentViewController:vc animated:NO completion:nil];
+    }
   }
 
   CDVPluginResult * pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"event":@"opened"}];

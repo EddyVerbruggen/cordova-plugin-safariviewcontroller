@@ -59,6 +59,7 @@ function openUrl(url, readerMode) {
     if (available) {
       SafariViewController.show({
             url: url,
+            hidden: false, // default false. You can use this to load cookies etc in the background (see issue #1 for details).
             animated: false, // default true, note that 'hide' will reuse this preference (the 'Done' button will always animate though)
             transition: 'curl', // unless animated is false you can choose from: curl, flip, fade, slide (default)
             enterReaderModeIfAvailable: readerMode // default false
@@ -96,5 +97,6 @@ function dismissSafari() {
 * Whereas `cordova-plugin-inappbrowser` is affected by [ATS](https://developer.apple.com/library/prerelease/ios/technotes/App-Transport-Security-Technote/), this plugin is not. This means you can even load `http` URL's without whitelisting them.
 
 ## 6. Changelog
+* 1.4.0 Added a `hidden` property to `show`.
 * 1.3.0 `isAvailable` plays nice with non-iOS platforms. Added a `transition` property to `show`.
 * 1.2.0 Added lifecycle events to the success handler of `show`, and added the `animated` property to `show`.
