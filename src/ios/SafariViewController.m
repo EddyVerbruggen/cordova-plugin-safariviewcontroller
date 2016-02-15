@@ -12,9 +12,9 @@
 }
 
 - (void) show:(CDVInvokedUrlCommand*)command {
-  // testing safariviewcontroller --> requires an isAvailable function to check if isAtLeastVersion(9)
   NSDictionary* options = [command.arguments objectAtIndex:0];
-  NSString* urlString = [options objectForKey:@"url"];
+  NSString* transition = options[@"transition"];
+  NSString* urlString = options[@"url"];
   if (urlString == nil) {
     [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"url can't be empty"] callbackId:command.callbackId];
     return;
@@ -26,12 +26,31 @@
 
   vc = [[SFSafariViewController alloc] initWithURL:url entersReaderIfAvailable:readerMode];
   vc.delegate = self;
-  // not really necessary to move the callback to the completion handler
-  [self.viewController presentViewController:vc animated:self.animated completion:nil];
-  // .. so doing it here
+  
+  if (self.animated) {
+    vc.modalTransitionStyle = [self getTransitionStyle:transition];
+    [self.viewController showViewController:vc sender:self];
+  } else {
+    [self.viewController presentViewController:vc animated:NO completion:nil];
+  }
+
   CDVPluginResult * pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"event":@"opened"}];
   [pluginResult setKeepCallback:[NSNumber numberWithBool:YES]];
   [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
+}
+
+- (UIModalTransitionStyle) getTransitionStyle:(NSString*) input {
+  if (input == nil) {
+    return UIModalTransitionStyleCoverVertical;
+  } else if ([input isEqualToString:@"curl"]) {
+    return UIModalTransitionStylePartialCurl;
+  } else if ([input isEqualToString:@"fade"]) {
+    return UIModalTransitionStyleCrossDissolve;
+  } else if ([input isEqualToString:@"flip"]) {
+    return UIModalTransitionStyleFlipHorizontal;
+  } else {
+    return UIModalTransitionStyleCoverVertical;
+  }
 }
 
 - (void) hide:(CDVInvokedUrlCommand*)command {
