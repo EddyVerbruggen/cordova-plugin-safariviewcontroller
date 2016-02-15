@@ -1,7 +1,13 @@
 var exec = require("cordova/exec");
 module.exports = {
   isAvailable: function (callback) {
-    exec(callback, null, "SafariViewController", "isAvailable", []);
+    var errorHandler = function errorHandler(error) {
+      // An error has occurred while trying to access the
+      // SafariViewController native implementation, most likely because
+      // we are on an unsupported platform.
+      callback(false);
+    };
+    exec(callback, errorHandler, "SafariViewController", "isAvailable", []);
   },
   show: function (options, onSuccess, onError) {
     var opts = options || {};
