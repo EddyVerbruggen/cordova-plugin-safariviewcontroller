@@ -10,7 +10,7 @@ by Eddy Verbruggen - [@eddyverbruggen](https://twitter.com/eddyverbruggen)
 4. [Usage](#4-usage)
 5. [Advantages over InAppBrowser](#5-advantages-over-inappbrowser)
 6. [Reading Safari Data and Cookies with Cordova](#6-reading-safari-data-and-cookies-with-cordova)
-7. [Changelog](#6-changelog)
+7. [Changelog](#7-changelog)
 
 ## 1. Description
 * Use in cases where you'd otherwise use InAppBrowser
