@@ -32,6 +32,8 @@ Pressing 'Done' returns the user to your app as you'd expect.
 <img src="screenshots/02-demoapp.PNG" width="350"/>&nbsp;
 <img src="screenshots/03-demoapp.PNG" width="350"/>&nbsp;
 <img src="screenshots/04-demoapp.PNG" width="350"/>&nbsp;
+<img src="screenshots/05-curl.PNG" width="350"/>&nbsp;
+<img src="screenshots/06-flip.PNG" width="350"/>&nbsp;
 
 ## 3. Installation
 To install the plugin with the Cordova CLI from npm:
