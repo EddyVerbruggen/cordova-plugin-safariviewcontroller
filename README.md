@@ -65,7 +65,8 @@ function openUrl(url, readerMode) {
             hidden: false, // default false. You can use this to load cookies etc in the background (see issue #1 for details).
             animated: false, // default true, note that 'hide' will reuse this preference (the 'Done' button will always animate though)
             transition: 'curl', // unless animated is false you can choose from: curl, flip, fade, slide (default)
-            enterReaderModeIfAvailable: readerMode // default false
+            enterReaderModeIfAvailable: readerMode, // default false
+            tintColor: "#ff0000" // default is ios blue
           },
           // this success handler will be invoked for the lifecycle events 'opened', 'loaded' and 'closed'
           function(result) {
