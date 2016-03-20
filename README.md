@@ -36,7 +36,8 @@ Pressing 'Done' returns the user to your app as you'd expect.
 <img src="screenshots/06-flip.PNG" width="350"/>&nbsp;
 
 This one has a custom `tintColor` (check the buttons):
-<img src="screenshots/07-tintColor.PNG" width="350"/>&nbsp;
+
+<img src="screenshots/07-tintColor.PNG" width="350"/>
 
 ## 3. Installation
 To install the plugin with the Cordova CLI from npm:
