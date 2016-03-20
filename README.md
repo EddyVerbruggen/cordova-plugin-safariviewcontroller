@@ -34,6 +34,8 @@ Pressing 'Done' returns the user to your app as you'd expect.
 <img src="screenshots/04-demoapp.PNG" width="350"/>&nbsp;
 <img src="screenshots/05-curl.PNG" width="350"/>&nbsp;
 <img src="screenshots/06-flip.PNG" width="350"/>&nbsp;
+
+This one has a custom `tintColor` (check the buttons):
 <img src="screenshots/07-tintColor.PNG" width="350"/>&nbsp;
 
 ## 3. Installation
