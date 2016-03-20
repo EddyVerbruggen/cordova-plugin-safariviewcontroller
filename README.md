@@ -34,6 +34,7 @@ Pressing 'Done' returns the user to your app as you'd expect.
 <img src="screenshots/04-demoapp.PNG" width="350"/>&nbsp;
 <img src="screenshots/05-curl.PNG" width="350"/>&nbsp;
 <img src="screenshots/06-flip.PNG" width="350"/>&nbsp;
+<img src="screenshots/07-tintColor.PNG" width="350"/>&nbsp;
 
 ## 3. Installation
 To install the plugin with the Cordova CLI from npm:
@@ -153,6 +154,7 @@ Do this:
 
 
 ## 7. Changelog
+* 1.4.1 You can now set the color of the navbar and tabbar buttons. Thanks #16!
 * 1.4.0 Added a `hidden` property to `show`.
 * 1.3.0 `isAvailable` plays nice with non-iOS platforms. Added a `transition` property to `show`.
 * 1.2.0 Added lifecycle events to the success handler of `show`, and added the `animated` property to `show`.
