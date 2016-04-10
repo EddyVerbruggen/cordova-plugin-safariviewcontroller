@@ -19,8 +19,8 @@
     return;
   }
   NSURL *url = [NSURL URLWithString:urlString];
-  bool readerMode = [options[@"enterReaderModeIfAvailable"] isEqualToNumber:[NSNumber numberWithBool:YES]];
-  self.animated = [options[@"animated"] isEqualToNumber:[NSNumber numberWithBool:YES]];
+  bool readerMode = [options[@"enterReaderModeIfAvailable"] isEqual:[NSNumber numberWithBool:YES]];
+  self.animated = [options[@"animated"] isEqual:[NSNumber numberWithBool:YES]];
   self.callbackId = command.callbackId;
   
   vc = [[SFSafariViewController alloc] initWithURL:url entersReaderIfAvailable:readerMode];
