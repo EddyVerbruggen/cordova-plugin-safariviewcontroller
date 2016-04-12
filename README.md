@@ -157,6 +157,7 @@ Do this:
 
 
 ## 7. Changelog
+* 1.4.2 When passing a URL not starting with http/https the error callback will be invoked.
 * 1.4.1 You can now set the color of the navbar and tabbar buttons. Thanks #16!
 * 1.4.0 Added a `hidden` property to `show`.
 * 1.3.0 `isAvailable` plays nice with non-iOS platforms. Added a `transition` property to `show`.

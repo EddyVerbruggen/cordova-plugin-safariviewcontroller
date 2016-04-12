@@ -18,6 +18,10 @@
     [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"url can't be empty"] callbackId:command.callbackId];
     return;
   }
+  if (![[urlString lowercaseString] hasPrefix:@"http"]) {
+    [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"url must start with http or https"] callbackId:command.callbackId];
+    return;
+  }
   NSURL *url = [NSURL URLWithString:urlString];
   bool readerMode = [options[@"enterReaderModeIfAvailable"] isEqual:[NSNumber numberWithBool:YES]];
   self.animated = [options[@"animated"] isEqual:[NSNumber numberWithBool:YES]];
