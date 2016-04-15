@@ -40,18 +40,16 @@
     vc.view.frame = CGRectZero;
   } else {
     if (self.animated) {
+      // note that Apple dropped support for other animations in iOS 9.2 or 9.3 in favor of a slide-back gesture
       vc.modalTransitionStyle = [self getTransitionStyle:options[@"transition"]];
-      [self.viewController showViewController:vc sender:self];
-    } else {
-      [self.viewController presentViewController:vc animated:NO completion:nil];
     }
+    [self.viewController presentViewController:vc animated:self.animated completion:nil];
   }
   
   NSString *tintColor = options[@"tintColor"];
   if (tintColor != nil) {
     vc.view.tintColor = [self colorFromHexString:options[@"tintColor"]];
   }
-
 
   CDVPluginResult * pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"event":@"opened"}];
   [pluginResult setKeepCallback:[NSNumber numberWithBool:YES]];

@@ -68,7 +68,7 @@ function openUrl(url, readerMode) {
             url: url,
             hidden: false, // default false. You can use this to load cookies etc in the background (see issue #1 for details).
             animated: false, // default true, note that 'hide' will reuse this preference (the 'Done' button will always animate though)
-            transition: 'curl', // unless animated is false you can choose from: curl, flip, fade, slide (default)
+            transition: 'curl', // (this only works in iOS 9.1/9.2 and lower) unless animated is false you can choose from: curl, flip, fade, slide (default)
             enterReaderModeIfAvailable: readerMode, // default false
             tintColor: "#ff0000" // default is ios blue
           },
@@ -103,6 +103,7 @@ function dismissSafari() {
 * A nicer / cleaner UI which is consistent with Safari and all other apps using a `SFSafariViewController`.
 * Since this is the system's main browser, assets like cookies are shared with your app, so the user is still logged on in his favorite websites.
 * Whereas `cordova-plugin-inappbrowser` is affected by [ATS](https://developer.apple.com/library/prerelease/ios/technotes/App-Transport-Security-Technote/), this plugin is not. This means you can even load `http` URL's without whitelisting them.
+* Since iOS 9.2 or 9.3 you can swipe to go back to your app. Unfortunately, in favor of this Apple dropped the option to provide a custom transition (curl/flip/..) when presenting Safari.
 
 ## 6. Reading Safari Data and Cookies with Cordova
 
@@ -157,6 +158,7 @@ Do this:
 
 
 ## 7. Changelog
+* 1.4.3 Options weren't correctly passed to native code. THanks #19!
 * 1.4.2 When passing a URL not starting with http/https the error callback will be invoked.
 * 1.4.1 You can now set the color of the navbar and tabbar buttons. Thanks #16!
 * 1.4.0 Added a `hidden` property to `show`.
