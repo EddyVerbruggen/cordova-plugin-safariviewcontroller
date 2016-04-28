@@ -37,4 +37,14 @@
     <framework src="SafariServices.framework" weak="true"/>
   </platform>
 
+  <platform name="android">
+    <config-file target="config.xml" parent="/*">
+      <feature name="ChromeCustomTabPlugin">
+        <param name="android-package" value="com.cordovaplugin.ChromeCustomTabPlugin"/>
+      </feature>
+    </config-file>
+    <framework src="com.android.support:customtabs:23.2.0" />
+    <source-file src="src/android/ChromeCustomTabPlugin.java" target-dir="src/org/apache/cordova/plugin" />
+  </platform>
+
 </plugin>
