@@ -18,5 +18,11 @@ module.exports = {
   },
   hide: function (onSuccess, onError) {
     exec(onSuccess, onError, "SafariViewController", "hide", []);
+  },
+  connectToService: function (onSuccess, onError) {
+    exec(onSuccess, onError, "SafariViewController", "connectToService", []);
+  },
+  warmUp: function (onSuccess, onError) {
+    exec(onSuccess, onError, "SafariViewController", "warmUp", []);
   }
 };
