@@ -1,12 +1,12 @@
-package com.customtabsplugin;
+package com.customtabplugin;
 
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
-import android.support.customtabs.CustomTabsCallback;
+import android.support.annotation.ColorInt;
 import android.support.customtabs.CustomTabsClient;
 import android.support.customtabs.CustomTabsIntent;
-import android.support.customtabs.CustomTabsServiceConnection;
 import android.support.customtabs.CustomTabsSession;
 import android.text.TextUtils;
 import android.util.Log;
@@ -15,7 +15,6 @@ import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CordovaWebView;
 import org.apache.cordova.PluginResult;
-import org.chromium.customtabsclient.shared.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,21 +22,19 @@ import org.json.JSONObject;
 /**
 * This class echoes a string called from JavaScript.
 */
-public class ChromeCustomTabPlugin extends CordovaPlugin implements ServiceConnectionCallback {
+public class ChromeCustomTabPlugin extends CordovaPlugin{
 
     public static final String TAG = "ChromeCustomTabPlugin";
     public static final int CUSTOM_TAB_REQUEST_CODE = 1;
+    public static final String EXTRA_TOOLBAR_COLOR = "android.support.customtabs.extra.TOOLBAR_COLOR";
 
-    private CustomTabsSession mCustomTabsSession;
-    private CustomTabsClient mClient;
-    private CustomTabsServiceConnection mConnection;
-    private String mPackageNameToBind;
+    private CustomTabServiceHelper mCustomTabPluginHelper;
     private boolean wasConnected;
 
     @Override
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
         super.initialize(cordova, webView);
-        mPackageNameToBind = CustomTabsHelper.getPackageNameToUse(cordova.getActivity());
+        mCustomTabPluginHelper = new CustomTabServiceHelper(cordova.getActivity());
     }
 
     @Override
@@ -45,86 +42,110 @@ public class ChromeCustomTabPlugin extends CordovaPlugin implements ServiceConne
 
         switch (action) {
             case "isAvailable":
-                callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, isAvailable()));
+                callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, mCustomTabPluginHelper.isAvailable()));
                 return true;
 
-            case "show":
+            case "show": {
                 final JSONObject options = args.getJSONObject(0);
                 final String url = options.getString("url");
+                final String color = options.optString("color");
 
                 PluginResult pluginResult;
                 JSONObject result = new JSONObject();
-                try {
-                    this.show(url);
-                    result.put("event", "loaded");
-                    pluginResult = new PluginResult(PluginResult.Status.OK, result);
-                } catch (Exception ex) {
-                    result.put("error", ex.getMessage());
+                if(isAvailable()) {
+                    try {
+                        this.show(url, getColor(color));
+                        result.put("event", "loaded");
+                        pluginResult = new PluginResult(PluginResult.Status.OK, result);
+                    } catch (Exception ex) {
+                        result.put("error", ex.getMessage());
+                        pluginResult = new PluginResult(PluginResult.Status.ERROR, result);
+                    }
+                } else {
+                    result.put("error", "custom tabs are not available");
                     pluginResult = new PluginResult(PluginResult.Status.ERROR, result);
                 }
                 callbackContext.sendPluginResult(pluginResult);
                 return true;
-
-            case "connectToService":
-                bindCustomTabsService();
-                if (mConnection != null)
+            }
+            case "connectToService": {
+                if (bindCustomTabsService())
                     callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, true));
                 else
                     callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, "Failed to connect to service"));
                 return true;
-
-            case "warmUp":
+            }
+            case "warmUp": {
                 if (warmUp()) {
                     callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, true));
                 } else {
                     callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, "Failed to warm up service"));
                 }
                 return true;
+            }
+            case "mayLaunchUrl": {
+                final String url = args.getString(0);
+                if(mayLaunchUrl(url)){
+                    callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, true));
+                } else {
+                    callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR,String.format("Failed prepare to launch url: %s", url)));
+                }
+                return true;
+            }
         }
         return false;
     }
 
     private boolean isAvailable(){
-        return !TextUtils.isEmpty(mPackageNameToBind);
+        return mCustomTabPluginHelper.isAvailable();
     }
 
-    private void show(String url) {
+    private void show(String url, @ColorInt int color) {
         CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder(getSession()).build();
         Intent intent = customTabsIntent.intent;
         intent.setData(Uri.parse(url));
+        intent.putExtra(EXTRA_TOOLBAR_COLOR, color);
         cordova.startActivityForResult(this, intent, CUSTOM_TAB_REQUEST_CODE);
     }
 
     private boolean warmUp(){
         boolean success = false;
-        if (mClient != null) success = mClient.warmup(0);
+        final CustomTabsClient client = mCustomTabPluginHelper.getClient();
+        if (client != null) success = client.warmup(0);
         return success;
     }
 
+    private boolean mayLaunchUrl(String url){
+        boolean success = false;
+        if (mCustomTabPluginHelper.getClient() != null) {
+            CustomTabsSession session = getSession();
+            success = session.mayLaunchUrl(Uri.parse(url), null, null);
+        }
+
+        return success;
+    }
+
+    private int getColor(String color) {
+        if(TextUtils.isEmpty(color)) return Color.LTGRAY;
+
+        try {
+            return Color.parseColor(color);
+        } catch (NumberFormatException ex) {
+            Log.i(TAG, String.format("Unable to parse Color: %s", color));
+            return Color.LTGRAY;
+        }
+    }
+
     private CustomTabsSession getSession() {
-        if (mClient == null) {
-            mCustomTabsSession = null;
-        } else if (mCustomTabsSession == null) {
-            mCustomTabsSession = mClient.newSession(new CustomTabsCallback());
-        }
-        return mCustomTabsSession;
+        return mCustomTabPluginHelper.getSession();
     }
 
-    private void bindCustomTabsService() {
-        if (mClient != null || !isAvailable()) return;
-
-        mConnection = new ServiceConnection(this);
-        boolean ok = CustomTabsClient.bindCustomTabsService(cordova.getActivity(), mPackageNameToBind, mConnection);
-        if(!ok) {
-            mConnection = null;
-        }
+    private boolean bindCustomTabsService() {
+        return mCustomTabPluginHelper.bindCustomTabsService(cordova.getActivity());
     }
 
-    private void unbindCustomTabsService() {
-        if (mConnection == null) return;
-        cordova.getActivity().unbindService(mConnection);
-        mClient = null;
-        mCustomTabsSession = null;
+    private boolean unbindCustomTabsService() {
+        return mCustomTabPluginHelper.unbindCustomTabsService(cordova.getActivity());
     }
 
     @Override
@@ -134,35 +155,22 @@ public class ChromeCustomTabPlugin extends CordovaPlugin implements ServiceConne
     }
 
     @Override
-    public void onServiceConnected(CustomTabsClient client) {
-        mClient = client;
+    public void onStop() {
+        wasConnected = unbindCustomTabsService();
+        super.onStop();
     }
 
     @Override
-    public void onServiceDisconnected() {
-        mClient = null;
-    }
-
-    @Override
-    public void onPause(boolean multitasking) {
-        if(mClient != null){
-            wasConnected = true;
-            unbindCustomTabsService();
-        }
-        super.onPause(multitasking);
-    }
-
-    @Override
-    public void onResume(boolean multitasking) {
+    public void onStart() {
         if(wasConnected){
             bindCustomTabsService();
         }
-        super.onResume(multitasking);
+        super.onStart();
     }
 
     @Override
     public void onDestroy() {
-        unbindCustomTabsService();
         super.onDestroy();
+        mCustomTabPluginHelper.setConnectionCallback(null);
     }
 }

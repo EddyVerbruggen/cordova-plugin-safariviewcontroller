@@ -24,5 +24,8 @@ module.exports = {
   },
   warmUp: function (onSuccess, onError) {
     exec(onSuccess, onError, "SafariViewController", "warmUp", []);
+  },
+  mayLaunchUrl: function (url, onSuccess, onError) {
+    exec(onSuccess, onError, "SafariViewController", "mayLaunchUrl", [url]);
   }
 };
