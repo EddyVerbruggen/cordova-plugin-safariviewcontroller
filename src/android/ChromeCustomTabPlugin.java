@@ -101,10 +101,15 @@ public class ChromeCustomTabPlugin extends CordovaPlugin{
     }
 
     private void show(String url, @ColorInt int color) {
-        CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder(getSession()).build();
-        Intent intent = customTabsIntent.intent;
+        CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder(getSession())
+                                                .setToolbarColor(color)
+                                                .build();
+
+        startCustomTabActivity(url, customTabsIntent.intent);
+    }
+
+    private void startCustomTabActivity(String url, Intent intent) {
         intent.setData(Uri.parse(url));
-        intent.putExtra(EXTRA_TOOLBAR_COLOR, color);
         cordova.startActivityForResult(this, intent, CUSTOM_TAB_REQUEST_CODE);
     }
 
