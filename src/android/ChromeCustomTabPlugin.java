@@ -19,17 +19,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
-* This class echoes a string called from JavaScript.
-*/
 public class ChromeCustomTabPlugin extends CordovaPlugin{
 
     public static final String TAG = "ChromeCustomTabPlugin";
     public static final int CUSTOM_TAB_REQUEST_CODE = 1;
-    public static final String EXTRA_TOOLBAR_COLOR = "android.support.customtabs.extra.TOOLBAR_COLOR";
 
     private CustomTabServiceHelper mCustomTabPluginHelper;
     private boolean wasConnected;
+    private  CallbackContext callbackContext;
 
     @Override
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
@@ -48,15 +45,17 @@ public class ChromeCustomTabPlugin extends CordovaPlugin{
             case "show": {
                 final JSONObject options = args.getJSONObject(0);
                 final String url = options.getString("url");
-                final String color = options.optString("color");
+                final String toolbarColor = options.optString("toolbarColor");
 
                 PluginResult pluginResult;
                 JSONObject result = new JSONObject();
                 if(isAvailable()) {
                     try {
-                        this.show(url, getColor(color));
+                        this.show(url, getColor(toolbarColor));
                         result.put("event", "loaded");
                         pluginResult = new PluginResult(PluginResult.Status.OK, result);
+                        pluginResult.setKeepCallback(true);
+                        this.callbackContext = callbackContext;
                     } catch (Exception ex) {
                         result.put("error", ex.getMessage());
                         pluginResult = new PluginResult(PluginResult.Status.ERROR, result);
@@ -100,10 +99,10 @@ public class ChromeCustomTabPlugin extends CordovaPlugin{
         return mCustomTabPluginHelper.isAvailable();
     }
 
-    private void show(String url, @ColorInt int color) {
+    private void show(String url, @ColorInt int toolbarColor) {
         CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder(getSession())
-                                                .setToolbarColor(color)
-                                                .build();
+                .setToolbarColor(toolbarColor)
+                .build();
 
         startCustomTabActivity(url, customTabsIntent.intent);
     }
@@ -156,7 +155,19 @@ public class ChromeCustomTabPlugin extends CordovaPlugin{
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-        Log.d(TAG, String.format("requestCode: %d, resultCode: %d.", requestCode, resultCode));
+        if(requestCode == CUSTOM_TAB_REQUEST_CODE){
+            JSONObject result = new JSONObject();
+            try {
+                result.put("event", "closed");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            
+            if(callbackContext != null){
+                callbackContext.success(result);
+                callbackContext = null;
+            }
+        }
     }
 
     @Override
