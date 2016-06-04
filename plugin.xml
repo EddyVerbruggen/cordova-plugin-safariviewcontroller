@@ -46,11 +46,17 @@
     </config-file>
     <framework src="build/android/SafariViewController-java17.gradle" custom="true" type="gradleReference" />
     <framework src="com.android.support:customtabs:23.2.0" />
+
     <source-file src="src/android/ChromeCustomTabPlugin.java"             target-dir="src/com/customtabplugin" />
     <source-file src="src/android/helpers/CustomTabServiceHelper.java"    target-dir="src/com/customtabplugin" />
     <source-file src="src/android/helpers/CustomTabsHelper.java"          target-dir="src/org/chromium/customtabsclient/shared" />
     <source-file src="src/android/helpers/ServiceConnection.java"         target-dir="src/org/chromium/customtabsclient/shared" />
     <source-file src="src/android/helpers/ServiceConnectionCallback.java" target-dir="src/org/chromium/customtabsclient/shared" />
+
+    <source-file src="src/android/res/anim/slide_in_left.xml"   target-dir="res/anim" />
+    <source-file src="src/android/res/anim/slide_in_right.xml"  target-dir="res/anim" />
+    <source-file src="src/android/res/anim/slide_out_left.xml"  target-dir="res/anim" />
+    <source-file src="src/android/res/anim/slide_out_right.xml" target-dir="res/anim" />
   </platform>
 
 </plugin>

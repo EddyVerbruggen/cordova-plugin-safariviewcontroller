@@ -1,13 +1,18 @@
 package com.customtabplugin;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.ColorInt;
 import android.support.customtabs.CustomTabsClient;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.customtabs.CustomTabsSession;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import org.apache.cordova.CallbackContext;
@@ -27,6 +32,7 @@ public class ChromeCustomTabPlugin extends CordovaPlugin{
     private CustomTabServiceHelper mCustomTabPluginHelper;
     private boolean wasConnected;
     private  CallbackContext callbackContext;
+    private Bundle mStartAnimationBundle;
 
     @Override
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
@@ -44,14 +50,27 @@ public class ChromeCustomTabPlugin extends CordovaPlugin{
 
             case "show": {
                 final JSONObject options = args.getJSONObject(0);
-                final String url = options.getString("url");
+                final String url = options.optString("url");
+                if(TextUtils.isEmpty(url)){
+                    JSONObject result = new JSONObject();
+                    result.put("error", "expected argument 'url' to be non empty string.");
+                    PluginResult pluginResult = new PluginResult(PluginResult.Status.ERROR, result);
+                    callbackContext.sendPluginResult(pluginResult);
+                    return true;
+                }
+
                 final String toolbarColor = options.optString("toolbarColor");
+                final Boolean showDefaultShareMenuItem = options.optBoolean("showDefaultShareMenuItem");
+                String transition = "";
+                mStartAnimationBundle = null;
+                final Boolean animated = options.optBoolean("animated", true);
+                if(animated) transition = options.optString("transition", "slide");
 
                 PluginResult pluginResult;
                 JSONObject result = new JSONObject();
                 if(isAvailable()) {
                     try {
-                        this.show(url, getColor(toolbarColor));
+                        this.show(url, getColor(toolbarColor), showDefaultShareMenuItem, transition);
                         result.put("event", "loaded");
                         pluginResult = new PluginResult(PluginResult.Status.OK, result);
                         pluginResult.setKeepCallback(true);
@@ -99,17 +118,38 @@ public class ChromeCustomTabPlugin extends CordovaPlugin{
         return mCustomTabPluginHelper.isAvailable();
     }
 
-    private void show(String url, @ColorInt int toolbarColor) {
-        CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder(getSession())
-                .setToolbarColor(toolbarColor)
-                .build();
+    private void show(String url, @ColorInt int toolbarColor, boolean showDefaultShareMenuItem, String transition) {
+        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder(getSession())
+                .setToolbarColor(toolbarColor);
+        if(showDefaultShareMenuItem)
+            builder.addDefaultShareMenuItem();
+        if(!TextUtils.isEmpty(transition))
+            addTransition(builder, transition);
+
+        CustomTabsIntent customTabsIntent = builder.build();
 
         startCustomTabActivity(url, customTabsIntent.intent);
     }
 
+    private void addTransition(CustomTabsIntent.Builder builder, String transition) {
+        final String animType = "anim";
+        switch (transition){
+            case ("slide"):
+            default:
+                mStartAnimationBundle = ActivityOptionsCompat.makeCustomAnimation(
+                        cordova.getActivity(), getIdentifier("slide_in_right", animType), getIdentifier("slide_out_left", animType)).toBundle();
+                builder.setExitAnimations(cordova.getActivity(), getIdentifier("slide_in_left", animType), getIdentifier("slide_out_right", animType));
+        }
+    }
+
     private void startCustomTabActivity(String url, Intent intent) {
         intent.setData(Uri.parse(url));
-        cordova.startActivityForResult(this, intent, CUSTOM_TAB_REQUEST_CODE);
+        if(mStartAnimationBundle == null)
+            cordova.startActivityForResult(this, intent, CUSTOM_TAB_REQUEST_CODE);
+        else {
+            cordova.setActivityResultCallback(this);
+            ActivityCompat.startActivityForResult(cordova.getActivity(), intent, CUSTOM_TAB_REQUEST_CODE, mStartAnimationBundle);
+        }
     }
 
     private boolean warmUp(){
@@ -162,12 +202,17 @@ public class ChromeCustomTabPlugin extends CordovaPlugin{
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            
+
             if(callbackContext != null){
                 callbackContext.success(result);
                 callbackContext = null;
             }
         }
+    }
+
+    private int getIdentifier(String name, String type) {
+        final Activity activity = cordova.getActivity();
+        return activity.getResources().getIdentifier(name, type, activity.getPackageName());
     }
 
     @Override
