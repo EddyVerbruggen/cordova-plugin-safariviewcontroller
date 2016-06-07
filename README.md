@@ -75,15 +75,15 @@ function openUrl(url, readerMode) {
           // this success handler will be invoked for the lifecycle events 'opened', 'loaded' and 'closed'
           function(result) {
             if (result.event === 'opened') {
-              alert('opened');
+              console.log('opened');
             } else if (result.event === 'loaded') {
-              alert('loaded');
+              console.log('loaded');
             } else if (result.event === 'closed') {
-              alert('closed');
+              console.log('closed');
             }
           },
           function(msg) {
-            alert("KO: " + msg);
+            console.log("KO: " + msg);
           })
     } else {
       // potentially powered by InAppBrowser because that (currently) clobbers window.open
