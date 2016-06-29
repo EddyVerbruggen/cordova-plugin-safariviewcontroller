@@ -23,6 +23,10 @@
     return;
   }
   NSURL *url = [NSURL URLWithString:urlString];
+  if (url == nil) {
+    [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"bad url"] callbackId:command.callbackId];
+    return;
+  }
   bool readerMode = [options[@"enterReaderModeIfAvailable"] isEqual:[NSNumber numberWithBool:YES]];
   self.animated = [options[@"animated"] isEqual:[NSNumber numberWithBool:YES]];
   self.callbackId = command.callbackId;
