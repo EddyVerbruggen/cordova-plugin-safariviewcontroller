@@ -39,6 +39,10 @@ This one has a custom `tintColor` (check the buttons):
 
 <img src="screenshots/07-tintColor.PNG" width="350"/>
 
+On iOS 10, you can use `barColor` and `tintColor`:
+
+<img src="screenshots/08-barColor.PNG" width="350"/>
+
 ## 3. Installation
 To install the plugin with the Cordova CLI from npm:
 
@@ -70,7 +74,8 @@ function openUrl(url, readerMode) {
             animated: false, // default true, note that 'hide' will reuse this preference (the 'Done' button will always animate though)
             transition: 'curl', // (this only works in iOS 9.1/9.2 and lower) unless animated is false you can choose from: curl, flip, fade, slide (default)
             enterReaderModeIfAvailable: readerMode, // default false
-            tintColor: "#ff0000" // default is ios blue
+            barColor: "#0000ff", // default is white (iOS 10 only)
+            tintColor: "#ffffff" // default is ios blue
           },
           // this success handler will be invoked for the lifecycle events 'opened', 'loaded' and 'closed'
           function(result) {
