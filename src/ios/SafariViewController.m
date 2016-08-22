@@ -52,7 +52,18 @@
   
   NSString *tintColor = options[@"tintColor"];
   if (tintColor != nil) {
-    vc.view.tintColor = [self colorFromHexString:options[@"tintColor"]];
+    #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 100000 // iOS 10.0 supported
+      vc.preferredControlTintColor = [self colorFromHexString:options[@"tintColor"]];
+    #else
+      vc.view.tintColor = [self colorFromHexString:options[@"tintColor"]];
+    #endif
+  }
+
+  NSString *barColor = options[@"barColor"];
+  if (barColor != nil) {
+    #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 100000 // iOS 10.0 supported
+      vc.preferredBarTintColor = [self colorFromHexString:options[@"barColor"]];
+    #endif
   }
 
   CDVPluginResult * pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"event":@"opened"}];
