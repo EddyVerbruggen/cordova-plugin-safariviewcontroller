@@ -51,20 +51,35 @@
   }
   
   NSString *tintColor = options[@"tintColor"];
-  if (tintColor != nil) {
-    #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 100000 // iOS 10.0 supported
-      vc.preferredControlTintColor = [self colorFromHexString:options[@"tintColor"]];
-    #else
-      vc.view.tintColor = [self colorFromHexString:options[@"tintColor"]];
-    #endif
+  NSString *controlTintColor = options[@"controlTintColor"];
+  NSString *barColor = options[@"barColor"];
+
+  // if only tintColor is set, use that as the controlTintColor for iOS 10
+  if (barColor == nil && controlTintColor == nil) {
+    controlTintColor = tintColor;
+  } else if (tintColor == nil) {
+    tintColor = controlTintColor;
   }
 
-  NSString *barColor = options[@"barColor"];
-  if (barColor != nil) {
-    #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 100000 // iOS 10.0 supported
-      vc.preferredBarTintColor = [self colorFromHexString:options[@"barColor"]];
-    #endif
+  if (tintColor != nil) {
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0 // iOS 10.0 supported (compile time)
+    if (IsAtLeastiOSVersion(@"10")) { // iOS 10.0 supported (runtime)
+      vc.preferredControlTintColor = [self colorFromHexString:controlTintColor];
+    } else {
+      vc.view.tintColor = [self colorFromHexString:tintColor];
+    }
+#else
+    vc.view.tintColor = [self colorFromHexString:tintColor];
+#endif
   }
+
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0 // iOS 10.0 supported
+  if (IsAtLeastiOSVersion(@"10")) { // iOS 10.0 supported (runtime)
+    if (barColor != nil) {
+      vc.preferredBarTintColor = [self colorFromHexString:barColor];
+    }
+  }
+#endif
 
   CDVPluginResult * pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"event":@"opened"}];
   [pluginResult setKeepCallback:[NSNumber numberWithBool:YES]];

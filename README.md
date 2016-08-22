@@ -39,7 +39,8 @@ This one has a custom `tintColor` (check the buttons):
 
 <img src="screenshots/07-tintColor.PNG" width="350"/>
 
-On iOS 10, you can use `barColor` and `tintColor`:
+On iOS 10, you can use `barColor` and `controlTintColor` as well
+(to make sure iOS 9 buttons are not white in the case, pass in a `tintColor` as well):
 
 <img src="screenshots/08-barColor.PNG" width="350"/>
 
@@ -74,8 +75,9 @@ function openUrl(url, readerMode) {
             animated: false, // default true, note that 'hide' will reuse this preference (the 'Done' button will always animate though)
             transition: 'curl', // (this only works in iOS 9.1/9.2 and lower) unless animated is false you can choose from: curl, flip, fade, slide (default)
             enterReaderModeIfAvailable: readerMode, // default false
-            barColor: "#0000ff", // default is white (iOS 10 only)
-            tintColor: "#ffffff" // default is ios blue
+            tintColor: "#00ffff", // default is ios blue
+            barColor: "#0000ff", // on iOS 10+ you can change the background color as well
+            controlTintColor: "#ffffff" // on iOS 10+ you can override the default tintColor
           },
           // this success handler will be invoked for the lifecycle events 'opened', 'loaded' and 'closed'
           function(result) {
