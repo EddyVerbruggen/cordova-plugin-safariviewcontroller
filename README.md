@@ -17,6 +17,7 @@ by Eddy Verbruggen - [@eddyverbruggen](https://twitter.com/eddyverbruggen)
 * Use the new and powerful iOS9 viewcontroller to show webcontent in your PhoneGap app
 * Requires XCode 7 / iOS9 SDK to build
 * Requires iOS9 to use, lower versions need to fall back to InAppBrowser (example below!)
+* [Chrome custom tabs](https://developer.chrome.com/multidevice/android/customtabs) are Android's parallel to SafariViewController with even more customizable UI. You can give it a try with the latest version of this plugin. See [the wiki](https://github.com/EddyVerbruggen/cordova-plugin-safariviewcontroller/wiki) for details.
 
 Note that I didn't decide to clobber window.open to override InAppBrowser when applicable
 because that would mean you could never use InAppBrowser in case you need its advanced features
