@@ -62,7 +62,7 @@
   }
 
   if (tintColor != nil) {
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0 // iOS 10.0 supported (compile time)
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 100000 // iOS 10.0 supported (compile time)
     if (IsAtLeastiOSVersion(@"10")) { // iOS 10.0 supported (runtime)
       vc.preferredControlTintColor = [self colorFromHexString:controlTintColor];
     } else {
@@ -73,7 +73,7 @@
 #endif
   }
 
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0 // iOS 10.0 supported
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 100000 // iOS 10.0 supported
   if (IsAtLeastiOSVersion(@"10")) { // iOS 10.0 supported (runtime)
     if (barColor != nil) {
       vc.preferredBarTintColor = [self colorFromHexString:barColor];
