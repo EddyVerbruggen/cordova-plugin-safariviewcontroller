@@ -143,4 +143,14 @@
   }
 }
 
+- (NSArray<UIActivity *> *)safariViewController:(SFSafariViewController *)
+              controller activityItemsForURL:(NSURL *)URL
+              title:(nullable NSString *)title {
+
+    if(self.activityItemProvider)
+        return [self.activityItemProvider safariViewController:controller activityItemsForURL:URL title:title];
+    else
+        return nil;
+}
+
 @end
