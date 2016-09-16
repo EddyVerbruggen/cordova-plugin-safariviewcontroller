@@ -30,18 +30,18 @@
   bool readerMode = [options[@"enterReaderModeIfAvailable"] isEqual:[NSNumber numberWithBool:YES]];
   self.animated = [options[@"animated"] isEqual:[NSNumber numberWithBool:YES]];
   self.callbackId = command.callbackId;
-  
+
   vc = [[SFSafariViewController alloc] initWithURL:url entersReaderIfAvailable:readerMode];
   vc.delegate = self;
 
   bool hidden = [options[@"hidden"] isEqualToNumber:[NSNumber numberWithBool:YES]];
   if (hidden) {
     vc.view.userInteractionEnabled = NO;
-    vc.view.alpha = 0.0;
+    vc.view.alpha = 0.05;
     [self.viewController addChildViewController:vc];
     [self.viewController.view addSubview:vc.view];
     [vc didMoveToParentViewController:self.viewController];
-    vc.view.frame = CGRectZero;
+    vc.view.frame = CGRectMake(0.0, 0.0, 0.5, 0.5);
   } else {
     if (self.animated) {
       // note that Apple dropped support for other animations in iOS 9.2 or 9.3 in favor of a slide-back gesture
@@ -49,7 +49,7 @@
     }
     [self.viewController presentViewController:vc animated:self.animated completion:nil];
   }
-  
+
   NSString *tintColor = options[@"tintColor"];
   NSString *controlTintColor = options[@"controlTintColor"];
   NSString *barColor = options[@"barColor"];
