@@ -123,7 +123,7 @@
  */
 - (void)safariViewControllerDidFinish:(SFSafariViewController *)controller {
   if (self.callbackId != nil) {
-    NSString * cbid = self.callbackId;
+    NSString * cbid = [self.callbackId copy];
     self.callbackId = nil;
     CDVPluginResult * pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"event":@"closed"}];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:cbid];
