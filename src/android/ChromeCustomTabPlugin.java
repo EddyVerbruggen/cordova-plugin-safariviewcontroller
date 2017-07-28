@@ -23,6 +23,7 @@ import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.chromium.customtabsclient.shared.CustomTabsHelper;
 
 public class ChromeCustomTabPlugin extends CordovaPlugin{
 
@@ -125,8 +126,14 @@ public class ChromeCustomTabPlugin extends CordovaPlugin{
             builder.addDefaultShareMenuItem();
         if(!TextUtils.isEmpty(transition))
             addTransition(builder, transition);
+       
 
         CustomTabsIntent customTabsIntent = builder.build();
+        
+        String packageName = CustomTabsHelper.getPackageNameToUse(cordova.getActivity(), url);
+        if ( packageName != null ) {
+           customTabsIntent.intent.setPackage(packageName);
+        }
 
         startCustomTabActivity(url, customTabsIntent.intent);
     }
