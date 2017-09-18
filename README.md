@@ -158,7 +158,7 @@ Do this:
     function handleOpenURL(url) {
       setTimeout(function() {
         SafariViewController.hide();
-        var data = decodeURIComponenturl.substr(url.indexOf('=')+1));
+        var data = decodeURIComponenturl.substr(url.indexOf('=')+1);
         console.log('Browser data received: ' + data);
       }, 0);
     }
