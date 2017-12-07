@@ -78,7 +78,8 @@ function openUrl(url, readerMode) {
             enterReaderModeIfAvailable: readerMode, // default false
             tintColor: "#00ffff", // default is ios blue
             barColor: "#0000ff", // on iOS 10+ you can change the background color as well
-            controlTintColor: "#ffffff" // on iOS 10+ you can override the default tintColor
+            controlTintColor: "#ffffff", // on iOS 10+ you can override the default tintColor
+            encodeUrl: false, //default false
           },
           // this success handler will be invoked for the lifecycle events 'opened', 'loaded' and 'closed'
           function(result) {
@@ -148,8 +149,7 @@ Do this:
     SafariViewController.show({
       url: 'http://mycoolapp.com/hidden.html',
       hidden: true,
-      animated: false,
-      encodeUrl: false, //defaults to false
+      animated: false
     });
     ```
 
