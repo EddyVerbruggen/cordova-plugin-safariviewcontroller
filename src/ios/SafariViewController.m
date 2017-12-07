@@ -22,7 +22,12 @@
     [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"url must start with http or https"] callbackId:command.callbackId];
     return;
   }
-  urlString = [urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+
+  bool encodeUrl = [options[@"encodeUrl"] isEqualToNumber:[NSNumber numberWithBool:YES]];
+  if (encodeUrl) {
+    urlString = [urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+  }
+  
   NSURL *url = [NSURL URLWithString:urlString];
   if (url == nil) {
     [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"bad url"] callbackId:command.callbackId];
