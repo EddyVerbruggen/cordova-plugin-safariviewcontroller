@@ -148,7 +148,8 @@ Do this:
     SafariViewController.show({
       url: 'http://mycoolapp.com/hidden.html',
       hidden: true,
-      animated: false
+      animated: false,
+      encodeUrl: false, //defaults to false
     });
     ```
 
