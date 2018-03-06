@@ -109,6 +109,14 @@
 }
 
 - (void) hide:(CDVInvokedUrlCommand*)command {
+  SFSafariViewController *childVc = [self.viewController.childViewControllers lastObject];
+  if (childVc != nil) {
+    [childVc willMoveToParentViewController:nil];
+    [childVc.view removeFromSuperview];
+    [childVc removeFromParentViewController];
+    childVc = nil;
+  }
+  
   if (vc != nil) {
     [vc dismissViewControllerAnimated:self.animated completion:nil];
     vc = nil;
