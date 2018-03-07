@@ -165,7 +165,8 @@ Do this:
 
 
 ## 7. Changelog
-* 1.4.3 Options weren't correctly passed to native code. THanks #19!
+* 1.5.3 Hidden tabs don't get removed on `hide()` (iOS). Thanks #104!
+* 1.4.3 Options weren't correctly passed to native code. Thanks #19!
 * 1.4.2 When passing a URL not starting with http/https the error callback will be invoked.
 * 1.4.1 You can now set the color of the navbar and tabbar buttons. Thanks #16!
 * 1.4.0 Added a `hidden` property to `show`.
