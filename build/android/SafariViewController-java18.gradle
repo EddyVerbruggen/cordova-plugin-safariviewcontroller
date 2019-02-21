@@ -1,8 +1,8 @@
-ext.postBuildExtras = {
+cdvPluginPostBuildExtras.add({
     android {
         compileOptions {
             sourceCompatibility JavaVersion.VERSION_1_8
             targetCompatibility JavaVersion.VERSION_1_8
         }
     }
-}
+})
