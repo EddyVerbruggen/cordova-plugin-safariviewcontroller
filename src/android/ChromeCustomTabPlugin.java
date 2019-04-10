@@ -2,6 +2,7 @@ package com.customtabplugin;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -43,6 +44,7 @@ public class ChromeCustomTabPlugin extends CordovaPlugin{
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
+        final Context context = this.cordova.getContext();
 
         switch (action) {
             case "isAvailable":
@@ -87,6 +89,33 @@ public class ChromeCustomTabPlugin extends CordovaPlugin{
                 callbackContext.sendPluginResult(pluginResult);
                 return true;
             }
+            case "getViewHandlerPackages": {
+                PluginResult pluginResult;
+                final JSONObject json = new JSONObject();
+                json.put("defaultHandler", CustomTabsHelper.getDefaultViewHandlerPackageName(context));
+                json.put("customTabsImplementations", new JSONArray(CustomTabsHelper.getPackagesSupportingCustomTabs(context)));
+                pluginResult = new PluginResult(PluginResult.Status.OK, json);
+                callbackContext.sendPluginResult(pluginResult);
+                return true;
+            }
+            case "useCustomTabsImplementation": {
+                PluginResult pluginResult;
+                JSONObject json = new JSONObject();
+                final String packageName = args.optString(0);
+                if(TextUtils.isEmpty(packageName)) {
+                    json.put("error", "blank packageName");
+                    pluginResult = new PluginResult(PluginResult.Status.ERROR, json);
+                } else {
+                    try {
+                        mCustomTabPluginHelper.setPackageNameToBind(packageName, context);
+                        pluginResult = new PluginResult(PluginResult.Status.OK, true);
+                    } catch (CustomTabsHelper.InvalidPackageException e) {
+                        pluginResult = new PluginResult(PluginResult.Status.ERROR, "Invalid package: "+packageName);
+                    }
+                }
+                callbackContext.sendPluginResult(pluginResult);
+                return true;
+            }
             case "connectToService": {
                 if (bindCustomTabsService())
                     callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, true));
@@ -126,10 +155,10 @@ public class ChromeCustomTabPlugin extends CordovaPlugin{
             builder.addDefaultShareMenuItem();
         if(!TextUtils.isEmpty(transition))
             addTransition(builder, transition);
-       
+
 
         CustomTabsIntent customTabsIntent = builder.build();
-        
+
         String packageName = CustomTabsHelper.getPackageNameToUse(cordova.getActivity());
         if ( packageName != null ) {
            customTabsIntent.intent.setPackage(packageName);

@@ -19,6 +19,12 @@ module.exports = {
   hide: function (onSuccess, onError) {
     exec(onSuccess, onError, "SafariViewController", "hide", []);
   },
+  getViewHandlerPackages: function (onSuccess, onError) {
+    exec(onSuccess, onError, "SafariViewController", "getViewHandlerPackages", []);
+  },
+  useCustomTabsImplementation: function (packageName, onSuccess, onError) {
+    exec(onSuccess, onError, "SafariViewController", "useCustomTabsImplementation", [packageName]);
+  },
   connectToService: function (onSuccess, onError) {
     exec(onSuccess, onError, "SafariViewController", "connectToService", []);
   },

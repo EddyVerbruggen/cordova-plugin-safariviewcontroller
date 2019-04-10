@@ -39,7 +39,7 @@ public class CustomTabsHelper {
             "android.support.customtabs.extra.KEEP_ALIVE";
     private static final String ACTION_CUSTOM_TABS_CONNECTION =
             "android.support.customtabs.action.CustomTabsService";
-
+    private static final Intent activityIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.example.com"));
     private static String sPackageNameToUse;
 
     private CustomTabsHelper() {}
@@ -64,25 +64,8 @@ public class CustomTabsHelper {
         if (sPackageNameToUse != null) return sPackageNameToUse;
 
         PackageManager pm = context.getPackageManager();
-        // Get default VIEW intent handler.
-        Intent activityIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.example.com"));
-        ResolveInfo defaultViewHandlerInfo = pm.resolveActivity(activityIntent, 0);
-        String defaultViewHandlerPackageName = null;
-        if (defaultViewHandlerInfo != null) {
-            defaultViewHandlerPackageName = defaultViewHandlerInfo.activityInfo.packageName;
-        }
-
-        // Get all apps that can handle VIEW intents.
-        List<ResolveInfo> resolvedActivityList = pm.queryIntentActivities(activityIntent, PackageManager.MATCH_ALL);
-        List<String> packagesSupportingCustomTabs = new ArrayList<>();
-        for (ResolveInfo info : resolvedActivityList) {
-            Intent serviceIntent = new Intent();
-            serviceIntent.setAction(ACTION_CUSTOM_TABS_CONNECTION);
-            serviceIntent.setPackage(info.activityInfo.packageName);
-            if (pm.resolveService(serviceIntent, 0) != null) {
-                packagesSupportingCustomTabs.add(info.activityInfo.packageName);
-            }
-        }
+        final String defaultViewHandlerPackageName = getDefaultViewHandlerPackageName(context);
+        List<String> packagesSupportingCustomTabs = getPackagesSupportingCustomTabs(context);
 
         // Now packagesSupportingCustomTabs contains all apps that can handle both VIEW intents
         // and service calls.
@@ -104,6 +87,28 @@ public class CustomTabsHelper {
             sPackageNameToUse = LOCAL_PACKAGE;
         }
         return sPackageNameToUse;
+    }
+
+    public static String getDefaultViewHandlerPackageName(Context context) {
+        PackageManager pm = context.getPackageManager();
+        // Get default VIEW intent handler.
+        ResolveInfo defaultViewHandlerInfo = pm.resolveActivity(activityIntent, 0);
+        return defaultViewHandlerInfo == null ? null : defaultViewHandlerInfo.activityInfo.packageName;
+    }
+
+    public static List<String> getPackagesSupportingCustomTabs(Context context) {
+        PackageManager pm = context.getPackageManager();
+        List<ResolveInfo> resolvedActivityList = pm.queryIntentActivities(activityIntent, PackageManager.MATCH_ALL);
+        List<String> packagesSupportingCustomTabs = new ArrayList<>();
+        for (ResolveInfo info : resolvedActivityList) {
+            Intent serviceIntent = new Intent();
+            serviceIntent.setAction(ACTION_CUSTOM_TABS_CONNECTION);
+            serviceIntent.setPackage(info.activityInfo.packageName);
+            if (pm.resolveService(serviceIntent, 0) != null) {
+                packagesSupportingCustomTabs.add(info.activityInfo.packageName);
+            }
+        }
+        return packagesSupportingCustomTabs;
     }
 
     /**
@@ -138,5 +143,19 @@ public class CustomTabsHelper {
      */
     public static String[] getPackages() {
         return new String[]{"", STABLE_PACKAGE, BETA_PACKAGE, DEV_PACKAGE, LOCAL_PACKAGE};
+    }
+
+    public static void setPackageNameToUse(String packageName, Context context) throws InvalidPackageException{
+        if (getPackagesSupportingCustomTabs(context).contains(packageName)) {
+            sPackageNameToUse = packageName;
+        } else {
+            throw new InvalidPackageException(packageName);
+        }
+    }
+
+    public static class InvalidPackageException extends Exception {
+        public InvalidPackageException(String packageName) {
+            super(packageName + " has no Custom Tabs support.");
+        }
     }
 }

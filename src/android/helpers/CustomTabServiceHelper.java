@@ -24,7 +24,7 @@ import java.util.List;
  */
 public class CustomTabServiceHelper implements ServiceConnectionCallback {
 
-    private final String mPackageNameToBind;
+    private String mPackageNameToBind;
     private CustomTabsSession mCustomTabsSession;
     private CustomTabsClient mClient;
     private CustomTabsServiceConnection mConnection;
@@ -36,6 +36,11 @@ public class CustomTabServiceHelper implements ServiceConnectionCallback {
 
     public boolean isAvailable(){
         return !TextUtils.isEmpty(mPackageNameToBind);
+    }
+
+    public void setPackageNameToBind(String packageName, Context context) throws CustomTabsHelper.InvalidPackageException {
+        CustomTabsHelper.setPackageNameToUse(packageName, context);
+        mPackageNameToBind = packageName;
     }
 
     /**
