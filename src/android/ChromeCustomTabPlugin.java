@@ -91,20 +91,20 @@ public class ChromeCustomTabPlugin extends CordovaPlugin{
             }
             case "getViewHandlerPackages": {
                 PluginResult pluginResult;
-                final JSONObject json = new JSONObject();
-                json.put("defaultHandler", CustomTabsHelper.getDefaultViewHandlerPackageName(context));
-                json.put("customTabsImplementations", new JSONArray(CustomTabsHelper.getPackagesSupportingCustomTabs(context)));
-                pluginResult = new PluginResult(PluginResult.Status.OK, json);
+                final JSONObject result = new JSONObject();
+                result.put("defaultHandler", CustomTabsHelper.getDefaultViewHandlerPackageName(context));
+                result.put("customTabsImplementations", new JSONArray(CustomTabsHelper.getPackagesSupportingCustomTabs(context)));
+                pluginResult = new PluginResult(PluginResult.Status.OK, result);
                 callbackContext.sendPluginResult(pluginResult);
                 return true;
             }
             case "useCustomTabsImplementation": {
                 PluginResult pluginResult;
-                JSONObject json = new JSONObject();
+                JSONObject result = new JSONObject();
                 final String packageName = args.optString(0);
                 if(TextUtils.isEmpty(packageName)) {
-                    json.put("error", "blank packageName");
-                    pluginResult = new PluginResult(PluginResult.Status.ERROR, json);
+                    result.put("error", "expected argument 'packageName' to be non empty string.");
+                    pluginResult = new PluginResult(PluginResult.Status.ERROR, result);
                 } else {
                     try {
                         mCustomTabPluginHelper.setPackageNameToBind(packageName, context);
