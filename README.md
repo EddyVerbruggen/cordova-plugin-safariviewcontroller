@@ -1,6 +1,17 @@
 SafariViewController Cordova Plugin
 ===================================
-by Eddy Verbruggen - [@eddyverbruggen](https://twitter.com/eddyverbruggen)
+
+[![NPM version][npm-image]][npm-url]
+[![Downloads][downloads-image]][npm-url]
+[![TotalDownloads][total-downloads-image]][npm-url]
+[![Twitter Follow][twitter-image]][twitter-url]
+
+[npm-image]:http://img.shields.io/npm/v/cordova-plugin-safariviewcontroller.svg
+[npm-url]:https://npmjs.org/package/cordova-plugin-safariviewcontroller
+[downloads-image]:http://img.shields.io/npm/dm/cordova-plugin-safariviewcontroller.svg
+[total-downloads-image]:http://img.shields.io/npm/dt/cordova-plugin-safariviewcontroller.svg?label=total%20downloads
+[twitter-image]:https://img.shields.io/twitter/follow/eddyverbruggen.svg?style=social&label=Follow%20me
+[twitter-url]:https://twitter.com/eddyverbruggen
 
 ## 0. Index
 
@@ -53,6 +64,8 @@ $ cordova plugin add cordova-plugin-safariviewcontroller
 ```
 
 ### Graceful fallback to InAppBrowser
+** This section is kinda obsolete by now (with iOS 12 currently being the latest version) **
+
 Since SafariViewController is new in iOS9 you need to have a fallback for older versions (and other platforms),
 so if `available` returns false (see the snippet below) you want to open the URL in the InAppBrowser probably,
 so be sure to include that plugin as well:
@@ -61,7 +74,7 @@ so be sure to include that plugin as well:
 $ cordova plugin add cordova-plugin-inappbrowser
 ```
 
-I'm not including it as a depency as not all folks may have this requirement.
+I'm not including it as a dependency as not all folks may have this requirement.
 
 ## 4. Usage
 Check the [demo code](demo/index.html) for an easy to drop in example, otherwise copy-paste this:
@@ -125,7 +138,7 @@ Do this:
 1. Install the [Custom URL Scheme Plugin](https://github.com/EddyVerbruggen/Custom-URL-scheme)
 2. Create a web page that reads Safari data on load and passes that data to the URL scheme:
 
-    ```javascript
+    ```html
     <html>
       <head>
         <script type="javascript">
@@ -143,7 +156,7 @@ Do this:
 
 3. Open the web page you created with a hidden Safari view:
 
-    ```javascript
+    ```js
     SafariViewController.show({
       url: 'http://mycoolapp.com/hidden.html',
       hidden: true,
@@ -153,7 +166,7 @@ Do this:
 
 4. Capture the data passed from the web page via the URL Scheme:
 
-    ```javascript
+    ```js
     function handleOpenURL(url) {
       setTimeout(function() {
         SafariViewController.hide();
@@ -165,6 +178,7 @@ Do this:
 
 
 ## 7. Changelog
+* 1.6.0 A few changes for Android. See [these closed issues](https://github.com/EddyVerbruggen/cordova-plugin-safariviewcontroller/milestone/7?closed=1).
 * 1.5.3 Hidden tabs don't get removed on `hide()` (iOS). Thanks #104!
 * 1.4.3 Options weren't correctly passed to native code. Thanks #19!
 * 1.4.2 When passing a URL not starting with http/https the error callback will be invoked.
