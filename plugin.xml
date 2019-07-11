@@ -59,4 +59,10 @@
     <source-file src="src/android/res/anim/slide_out_right.xml" target-dir="res/anim" />
   </platform>
 
+  <platform name="browser">
+    <js-module name="SafariViewController" src="www/browser-proxy.js">
+      <clobbers target="SafariViewController" />
+    </js-module>
+  </platform>
+
 </plugin>
