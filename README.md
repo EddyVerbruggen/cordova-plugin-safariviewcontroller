@@ -63,6 +63,8 @@ To install the plugin with the Cordova CLI from npm:
 $ cordova plugin add cordova-plugin-safariviewcontroller
 ```
 
+*Note*: the plugin requires Cordova Android 7.0.0 or later.
+
 ### Graceful fallback to InAppBrowser
 ** This section is kinda obsolete by now (with iOS 12 currently being the latest version) **
 
