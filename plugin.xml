@@ -36,4 +36,27 @@
 
     <framework src="SafariServices.framework" weak="true"/>
   </platform>
+
+  <platform name="android">	
+    <config-file target="config.xml" parent="/*">	
+      <feature name="SafariViewController">	
+        <param name="android-package" value="com.customtabplugin.ChromeCustomTabPlugin"/>	
+        <param name="onload" value="true" />	
+      </feature>	
+    </config-file>	
+    <framework src="build/android/SafariViewController-java18.gradle" custom="true" type="gradleReference" />	
+    <framework src="com.android.support:customtabs:23.2.0" />	
+
+    <source-file src="src/android/ChromeCustomTabPlugin.java"             target-dir="src/com/customtabplugin" />	
+    <source-file src="src/android/helpers/CustomTabServiceHelper.java"    target-dir="src/com/customtabplugin" />	
+    <source-file src="src/android/helpers/CustomTabsHelper.java"          target-dir="src/org/chromium/customtabsclient/shared" />	
+    <source-file src="src/android/helpers/ServiceConnection.java"         target-dir="src/org/chromium/customtabsclient/shared" />	
+    <source-file src="src/android/helpers/ServiceConnectionCallback.java" target-dir="src/org/chromium/customtabsclient/shared" />	
+
+    <source-file src="src/android/res/anim/slide_in_left.xml"   target-dir="res/anim" />	
+    <source-file src="src/android/res/anim/slide_in_right.xml"  target-dir="res/anim" />	
+    <source-file src="src/android/res/anim/slide_out_left.xml"  target-dir="res/anim" />	
+    <source-file src="src/android/res/anim/slide_out_right.xml" target-dir="res/anim" />	
+  </platform>
+
 </plugin>
