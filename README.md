@@ -180,6 +180,7 @@ Do this:
 
 
 ## 7. Changelog
+* 2.0.0 Support AndroidX
 * 1.6.0 A few changes for Android. See [these closed issues](https://github.com/EddyVerbruggen/cordova-plugin-safariviewcontroller/milestone/7?closed=1).
 * 1.5.3 Hidden tabs don't get removed on `hide()` (iOS). Thanks #104!
 * 1.4.3 Options weren't correctly passed to native code. Thanks #19!
