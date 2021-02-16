@@ -50,6 +50,9 @@ public class ChromeCustomTabPlugin extends CordovaPlugin{
                 callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, mCustomTabPluginHelper.isAvailable()));
                 return true;
 
+            case "hide":
+                return true;
+                
             case "show": {
                 final JSONObject options = args.getJSONObject(0);
                 final String url = options.optString("url");
