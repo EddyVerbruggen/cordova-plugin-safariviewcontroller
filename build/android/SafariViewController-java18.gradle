@@ -1,8 +1,3 @@
-cdvPluginPostBuildExtras.add({
-    android {
-        compileOptions {
-            sourceCompatibility JavaVersion.VERSION_1_8
-            targetCompatibility JavaVersion.VERSION_1_8
-        }
-    }
-})
+// No additional Gradle configuration is required by this plugin.
+// The host Cordova/Android project is expected to configure
+// Kotlin (plugins, stdlib, jvmTarget, etc.) on its own.

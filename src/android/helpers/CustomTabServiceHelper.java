@@ -1,6 +1,6 @@
 // mostly copied from:
 // https://github.com/GoogleChrome/custom-tabs-client/blob/master/demos/src/main/java/org/chromium/customtabsdemos/CustomTabActivityHelper.java
-
+// (intentionally left blank – Java version superseded by Kotlin)
 package com.customtabplugin;
 
 import android.app.Activity;

@@ -1,5 +1,5 @@
-SafariViewController Cordova Plugin
-===================================
+BrowserViewController Cordova Plugin
+===========================================================
 
 [![NPM version][npm-image]][npm-url]
 [![Downloads][downloads-image]][npm-url]
@@ -25,10 +25,10 @@ SafariViewController Cordova Plugin
 
 ## 1. Description
 * Use in cases where you'd otherwise use InAppBrowser
-* Use the new and powerful iOS9 viewcontroller to show webcontent in your PhoneGap app
+* Use the new and powerful iOS9 viewcontroller (`SFSafariViewController`) to show webcontent in your PhoneGap app
 * Requires XCode 7 / iOS9 SDK to build
 * Requires iOS9 to use, lower versions need to fall back to InAppBrowser (example below!)
-* [Chrome custom tabs](https://developer.chrome.com/multidevice/android/customtabs) are Android's parallel to SafariViewController with even more customizable UI. You can give it a try with the latest version of this plugin. See [the wiki](https://github.com/EddyVerbruggen/cordova-plugin-safariviewcontroller/wiki) for details.
+* [Chrome custom tabs](https://developer.chrome.com/multidevice/android/customtabs) are Android's parallel to SafariViewController with even more customizable UI. On Android this plugin exposes them through the JavaScript interface `BrowserViewController`. See [the wiki](https://github.com/EddyVerbruggen/cordova-plugin-safariviewcontroller/wiki) for details.
 
 Note that I didn't decide to clobber window.open to override InAppBrowser when applicable
 because that would mean you could never use InAppBrowser in case you need its advanced features
@@ -83,9 +83,9 @@ Check the [demo code](demo/index.html) for an easy to drop in example, otherwise
 
 ```js
 function openUrl(url, readerMode) {
-  SafariViewController.isAvailable(function (available) {
+  BrowserViewController.isAvailable(function (available) {
     if (available) {
-      SafariViewController.show({
+      BrowserViewController.show({
             url: url,
             hidden: false, // default false. You can use this to load cookies etc in the background (see issue #1 for details).
             animated: false, // default true, note that 'hide' will reuse this preference (the 'Done' button will always animate though)
@@ -116,7 +116,7 @@ function openUrl(url, readerMode) {
 }
 
 function dismissSafari() {
-  SafariViewController.hide()
+  BrowserViewController.hide()
 }
 ```
 
@@ -159,7 +159,7 @@ Do this:
 3. Open the web page you created with a hidden Safari view:
 
     ```js
-    SafariViewController.show({
+    BrowserViewController.show({
       url: 'http://mycoolapp.com/hidden.html',
       hidden: true,
       animated: false
@@ -171,7 +171,7 @@ Do this:
     ```js
     function handleOpenURL(url) {
       setTimeout(function() {
-        SafariViewController.hide();
+        BrowserViewController.hide();
         var data = decodeURIComponent(url.substr(url.indexOf('=')+1));
         console.log('Browser data received: ' + data);
       }, 0);
@@ -180,6 +180,7 @@ Do this:
 
 
 ## 7. Changelog
+* Unreleased Android: Migrate implementation to Kotlin and expose the JS API as `BrowserViewController` (while keeping the plugin id and native iOS class name `SafariViewController`).
 * 2.0.0 Support AndroidX
 * 1.6.0 A few changes for Android. See [these closed issues](https://github.com/EddyVerbruggen/cordova-plugin-safariviewcontroller/milestone/7?closed=1).
 * 1.5.3 Hidden tabs don't get removed on `hide()` (iOS). Thanks #104!

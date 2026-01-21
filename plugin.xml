@@ -20,13 +20,13 @@
     <engine name="cordova" version=">=3.0.0"/>
   </engines>
 
-  <js-module name="SafariViewController" src="www/SafariViewController.js">
-    <clobbers target="SafariViewController"/>
+  <js-module name="BrowserViewController" src="www/BrowserViewController.js">
+    <clobbers target="BrowserViewController"/>
   </js-module>
 
   <platform name="ios">
     <config-file parent="/*" target="config.xml">
-      <feature name="SafariViewController">
+      <feature name="BrowserViewController">
         <param name="ios-package" value="SafariViewController"/>
       </feature>
     </config-file>
@@ -39,26 +39,25 @@
 
   <platform name="android">
     <config-file target="config.xml" parent="/*">
-      <feature name="SafariViewController">
+      <feature name="BrowserViewController">
         <param name="android-package" value="com.customtabplugin.ChromeCustomTabPlugin"/>
         <param name="onload" value="true" />
       </feature>
     </config-file>
-	  <config-file target="AndroidManifest.xml" parent="/manifest">
+  	  <config-file target="AndroidManifest.xml" parent="/manifest">
       <queries>
         <intent>
             <action android:name="android.support.customtabs.action.CustomTabsService" />
         </intent>
       </queries>
     </config-file>
-    <framework src="build/android/SafariViewController-java18.gradle" custom="true" type="gradleReference" />
     <framework src="androidx.browser:browser:1.3.0" />
 
-    <source-file src="src/android/ChromeCustomTabPlugin.java"             target-dir="src/com/customtabplugin" />
-    <source-file src="src/android/helpers/CustomTabServiceHelper.java"    target-dir="src/com/customtabplugin" />
-    <source-file src="src/android/helpers/CustomTabsHelper.java"          target-dir="src/org/chromium/customtabsclient/shared" />
-    <source-file src="src/android/helpers/ServiceConnection.java"         target-dir="src/org/chromium/customtabsclient/shared" />
-    <source-file src="src/android/helpers/ServiceConnectionCallback.java" target-dir="src/org/chromium/customtabsclient/shared" />
+    <source-file src="src/android/ChromeCustomTabPlugin.kt"             target-dir="src/com/customtabplugin" />
+    <source-file src="src/android/helpers/CustomTabServiceHelper.kt"    target-dir="src/com/customtabplugin" />
+    <source-file src="src/android/helpers/CustomTabsHelper.kt"          target-dir="src/org/chromium/customtabsclient/shared" />
+    <source-file src="src/android/helpers/ServiceConnection.kt"         target-dir="src/org/chromium/customtabsclient/shared" />
+    <source-file src="src/android/helpers/ServiceConnectionCallback.kt" target-dir="src/org/chromium/customtabsclient/shared" />
 
     <source-file src="src/android/res/anim/slide_in_left.xml"   target-dir="res/anim" />
     <source-file src="src/android/res/anim/slide_in_right.xml"  target-dir="res/anim" />

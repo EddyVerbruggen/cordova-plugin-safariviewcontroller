@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
+// (intentionally left blank – Java version superseded by Kotlin)
 package org.chromium.customtabsclient.shared;
 
 import androidx.browser.customtabs.CustomTabsClient;

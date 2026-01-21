@@ -1,5 +1,5 @@
 package com.customtabplugin;
-
+// (intentionally left blank – Java version superseded by Kotlin)
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
